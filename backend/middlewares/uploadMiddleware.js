@@ -1,9 +1,20 @@
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
+
+// ✅ Use /tmp because Vercel allows writing only there
+const uploadPath = '/tmp/uploads';
+
+// Create /tmp/uploads if it doesn’t exist
+if (!fs.existsSync(uploadPath)) {
+  fs.mkdirSync(uploadPath, { recursive: true });
+}
 
 // Configure Multer for temporary file storage
 const storage = multer.diskStorage({
-  destination: 'uploads/', // default local folder
+  destination(req, file, cb) {
+    cb(null, uploadPath);
+  },
   filename(req, file, cb) {
     cb(null, `${Date.now()}-${file.originalname}`);
   },
@@ -21,6 +32,7 @@ function checkFileType(file, cb) {
   }
 }
 
+// Initialize Multer
 const upload = multer({
   storage,
   fileFilter: (req, file, cb) => checkFileType(file, cb),
