@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8000/api', // your backend URL
+  baseURL: 'https://ecommerce-app-git-main-vinay-kumar-patels-projects.vercel.app/', // your backend URL
   withCredentials: true,
 });
 
