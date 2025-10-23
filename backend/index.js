@@ -13,7 +13,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: 'https://ecommerce-app-bz2l.vercel.app/',
+    origin: 'https://ecommerce-app-2p5l.vercel.app/api',
     credentials: true,
   })
 );
