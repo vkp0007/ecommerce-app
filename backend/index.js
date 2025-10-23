@@ -15,7 +15,7 @@ const app = express();
 app.use(
   cors({
     origin: [
-      'https://ecommerce-app-2p5l.vercel.app/' // your frontend domain
+      'https://ecommerce-app-l5nf.vercel.app/' // your frontend domain
       
     ],
     credentials: true,
