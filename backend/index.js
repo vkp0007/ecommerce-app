@@ -11,9 +11,13 @@ dotenv.config({ path: '.env' });
 
 const app = express();
 
+// ✅ Correct CORS configuration
 app.use(
   cors({
-    origin: 'https://ecommerce-app-2p5l.vercel.app/api',
+    origin: [
+      'https://ecommerce-app-2p5l.vercel.app', // your frontend domain
+      'http://localhost:5173' // local dev (optional)
+    ],
     credentials: true,
   })
 );
@@ -28,7 +32,7 @@ app.get('/', (req, res) => {
   res.send('API is running and DB is connected!');
 });
 
-// Mount routes
+// ✅ Mount routes
 app.use('/api/users', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
