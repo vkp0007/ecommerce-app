@@ -1,14 +1,14 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage';
-import CheckoutPage from './pages/CheckoutPage';      // <-- ADD
+import CheckoutPage from './pages/CheckoutPage';
 import OrderPage from './pages/OrderPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { useAuth } from './context/AuthContext';
 
 const AppContent = () => {
   const { user } = useAuth();
@@ -28,7 +28,7 @@ const AppContent = () => {
 
           {/* Protected Routes */}
           <Route path="/cart" element={user ? <CartPage /> : <Navigate to="/login" />} />
-          <Route path="/checkout" element={user ? <CheckoutPage /> : <Navigate to="/login" />} />   {/* <-- ADDED */}
+          <Route path="/checkout" element={user ? <CheckoutPage /> : <Navigate to="/login" />} />
           <Route path="/orders" element={user ? <OrderPage /> : <Navigate to="/login" />} />
 
           {/* Admin Route */}
@@ -36,6 +36,9 @@ const AppContent = () => {
             path="/admin"
             element={user?.isAdmin ? <AdminDashboard /> : <Navigate to="/" />}
           />
+
+          {/* Catch-All 404 */}
+          <Route path="*" element={<h2>404 - Page Not Found</h2>} />
         </Routes>
       </div>
     </>
@@ -43,11 +46,9 @@ const AppContent = () => {
 };
 
 const App = () => (
-  <AuthProvider>
-    <Router>
-      <AppContent />
-    </Router>
-  </AuthProvider>
+  <Router>
+    <AppContent />
+  </Router>
 );
 
 export default App;
