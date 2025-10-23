@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from '../utils/axiosInstance';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 const CartPage = () => {
   const { user } = useAuth();
