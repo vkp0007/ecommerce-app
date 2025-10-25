@@ -24,7 +24,20 @@ const productSchema = new Schema({
         type: String,
         required: true
     },
-    user : {
+    category: {
+        type: String,
+        required: [true, 'Product category is required'],
+        enum: [
+            'Electronics',
+            'Fashion',
+            'Home Appliances',
+            'Books',
+            'Toys',
+            'Sports',
+            'Beauty',
+        ]
+    },
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }

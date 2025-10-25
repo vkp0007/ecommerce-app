@@ -32,6 +32,7 @@ app.get('/', (req, res) => {
   res.send('API is running and DB is connected!');
 });
 
+
 // ✅ Mount routes
 app.use('/api/users', authRoutes);
 app.use('/api/products', productRoutes);

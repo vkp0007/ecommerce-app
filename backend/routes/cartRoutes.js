@@ -13,8 +13,7 @@ router.route('/')
     .get(protect, getCart)
     .post(protect, addToCart);
 
- router
-    .route('/:productId')
+ router.route('/:productId')
     .put(protect, updateCartItem)
    .delete(protect, removeFromCart);
 
