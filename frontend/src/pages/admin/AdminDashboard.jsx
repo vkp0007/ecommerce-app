@@ -7,11 +7,11 @@ const AdminDashboard = () => {
   const [editProduct, setEditProduct] = useState(null);
 
   return (
-    <div className="p-6 bg-blue-50 min-h-screen">
+    <div className="p-6 min-h-screen">
       <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg p-6">
         <div className="flex justify-between items-center mb-6 border-b pb-3">
           <h2 className="text-2xl font-bold text-blue-700">
-            🛒 Admin Dashboard — Product Management
+           Admin Dashboard 
           </h2>
           <button
             onClick={() => {

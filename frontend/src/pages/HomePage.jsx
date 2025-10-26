@@ -1,129 +1,92 @@
-import { useEffect, useState } from 'react';
-import axios from '../utils/axiosInstance';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
+import sports from "../assets/sports.jpg";
+import toys from "../assets/toys.jpeg";
+import electronics from "../assets/electronics.webp";
+import fashion from "../assets/fashion.jpg";
+import home from "../assets/home appliances.webp";
+import books from "../assets/books.webp";
+
+const categories = [
+  { name: "Electronics", image: electronics },
+  { name: "Fashion", image: fashion },
+  { name: "Home Appliances", image: home },
+  { name: "Books", image: books },
+  { name: "Toys", image: toys },
+  { name: "Sports", image: sports },
+];
 
 const HomePage = () => {
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [search, setSearch] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  // Fetch all products
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const { data } = await axios.get('/products');
-        setProducts(data);
-        setFilteredProducts(data);
-      } catch (err) {
-        setError(err.response?.data?.message || 'Failed to fetch products');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  }, []);
-
-  // Handle search
-  const handleSearch = (e) => {
-    const query = e.target.value.toLowerCase();
-    setSearch(query);
-
-    if (!query) {
-      setFilteredProducts(products);
-      return;
-    }
-
-    const filtered = products.filter(
-      (p) =>
-        p.name.toLowerCase().includes(query) ||
-        p.description?.toLowerCase().includes(query)
-    );
-    setFilteredProducts(filtered);
-  };
-
-  if (loading)
-    return (
-      <div className="flex justify-center items-center h-64">
-        <p className="text-blue-500 text-lg animate-pulse font-medium">
-          Loading products...
-        </p>
-      </div>
-    );
-
-  if (error)
-    return (
-      <p className="text-red-500 text-center text-lg mt-10 font-medium">
-        {error}
-      </p>
-    );
+  const navigate = useNavigate();
 
   return (
-    <div className="bg-blue-50 min-h-screen">
-    
-
-   
-
-      {/* 🛒 Product Section */}
-      <section id="products" className="p-6">
-        {/* Header + Search */}
-        <div className="flex flex-col sm:flex-row items-center justify-between mb-10 gap-4">
-          <h2 className="text-3xl font-extrabold text-blue-700 text-center sm:text-left drop-shadow-sm">
-            🛍️ Available Products
-          </h2>
-
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={search}
-            onChange={handleSearch}
-            className="px-4 py-2 rounded-lg border border-yellow-400 w-full sm:w-80 text-black 
-            focus:outline-none focus:ring-2 focus:ring-yellow-400 shadow-sm"
-          />
-        </div>
-
-        {/* Product Grid */}
-        {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-            {filteredProducts.map((product) => (
-              <div
-                key={product._id}
-                className="bg-white border-2 border-blue-300 rounded-2xl shadow-lg p-5 flex flex-col items-center text-center 
-                hover:shadow-2xl hover:scale-105 transition-all duration-300 ease-in-out"
-              >
-                <div className="w-full h-56 overflow-hidden rounded-xl mb-4 bg-blue-100 flex justify-center items-center">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="max-h-full object-contain"
-                  />
-                </div>
-
-                <h3 className="font-semibold text-lg text-blue-800 mb-1">
-                  {product.name}
-                </h3>
-                <p className="text-yellow-600 font-medium mb-3 text-lg">
-                  ₹{product.price}
-                </p>
-
-                <Link
-                  to={`/product/${product._id}`}
-                  className="mt-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-lg 
-                  transition-colors duration-200 shadow-md"
-                >
-                  View Product
-                </Link>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-center text-gray-600 text-lg mt-16">
-            No products found matching your search.
-          </p>
-        )}
+    <div className=" min-h-screen flex flex-col">
+      
+      {/* 🌟 Hero Section */}
+      <section className="bg-blue-500 text-white py-6 text-center shadow-lg">
+        <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 drop-shadow-lg">
+          Discover the Best Deals Every Day!
+        </h1>
+        <p className="text-lg sm:text-xl mb-8 opacity-90">
+          Shop your favorite categories and save more with Mini E-Commerce.
+        </p>
+        <button
+          onClick={() => navigate("/products")}
+          className="bg-yellow-300 hover:bg-yellow-400 text-black font-semibold px-8 py-3 rounded-lg text-lg transition-transform hover:scale-105 shadow-md"
+        >
+          🛒 Shop Now
+        </button>
       </section>
 
+      {/* 🏷️ Categories Section */}
+      <section className="py-10 px-6 max-w-7xl mx-auto">
+        <h2 className="text-3xl font-extrabold text-blue-700 text-center mb-12">
+          Explore Categories
+        </h2>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-10">
+          {categories.map((cat) => (
+            <div
+              key={cat.name}
+              onClick={() => navigate(`/products?category=${cat.name}`)}
+              className="bg-yellow-50 shadow-md hover:shadow-xl hover:scale-105 transition-all rounded-2xl p-5 text-center cursor-pointer border-2 border-blue-200 hover:border-yellow-400"
+            >
+              <div className="w-28 h-28 mx-auto mb-4 rounded-full overflow-hidden flex items-center justify-center shadow-inner">
+                <img
+                  src={cat.image}
+                  alt={cat.name}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+              <h3 className="font-semibold text-blue-800 text-lg">
+                {cat.name}
+              </h3>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ✨ Call to Action */}
+      <section className="bg-yellow-100 py-8 text-center mt-10 shadow-inner">
+        <h2 className="text-2xl font-bold text-blue-800 mb-3">
+          Start Shopping Today!
+        </h2>
+        <p className="text-gray-700 mb-6">
+          Discover new arrivals and best deals handpicked just for you.
+        </p>
+        <Link
+          to="/products"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-all shadow-md"
+        >
+          Browse Products
+        </Link>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-blue-500 text-white text-center py-5">
+        <p className="text-sm">
+          © {new Date().getFullYear()} Mini E-Commerce. All rights reserved.
+        </p>
+      </footer>
     </div>
   );
 };

@@ -1,16 +1,27 @@
-import { useState } from 'react';
-import axios from '../../utils/axiosInstance';
-import { useAuth } from '../../context/AuthContext';
+import { useState } from "react";
+import axios from "../../utils/axiosInstance";
+import { useAuth } from "../../context/AuthContext";
 
 const ProductForm = ({ editProduct, setEditProduct, setShowForm }) => {
   const { user } = useAuth();
+
   const [formData, setFormData] = useState({
-    name: editProduct?.name || '',
-    description: editProduct?.description || '',
-    price: editProduct?.price || '',
-    countInStock: editProduct?.countInStock || '',
+    name: editProduct?.name || "",
+    description: editProduct?.description || "",
+    category: editProduct?.category || "",
+    price: editProduct?.price || "",
+    countInStock: editProduct?.countInStock || "",
     image: null,
   });
+
+  const categories = [
+    "Electronics",
+    "Fashion",
+    "Home Appliances",
+    "Books",
+    "Toys",
+    "Sports",
+  ];
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -31,31 +42,31 @@ const ProductForm = ({ editProduct, setEditProduct, setShowForm }) => {
       if (editProduct) {
         await axios.put(`/products/${editProduct._id}`, fd, {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${user.token}`,
           },
         });
-        alert('✅ Product updated successfully');
+        alert("✅ Product updated successfully");
       } else {
-        await axios.post('/products', fd, {
+        await axios.post("/products", fd, {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${user.token}`,
           },
         });
-        alert('✅ Product added successfully');
+        alert("✅ Product added successfully");
       }
       setShowForm(false);
       setEditProduct(null);
     } catch {
-      alert('❌ Failed to save product');
+      alert("❌ Failed to save product");
     }
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg max-w-lg mx-auto border border-blue-200">
-      <h3 className="text-2xl font-bold text-blue-700 mb-4 text-center">
-        {editProduct ? '✏️ Edit Product' : '➕ Add New Product'}
+    <div className="bg-white p-6 rounded-xl shadow-lg max-w-lg mx-auto border border-blue-200 my-8">
+      <h3 className="text-2xl font-bold text-blue-700 mb-6 text-center">
+        {editProduct ? "✏️ Edit Product" : "➕ Add New Product"}
       </h3>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -65,14 +76,34 @@ const ProductForm = ({ editProduct, setEditProduct, setShowForm }) => {
           onChange={handleChange}
           placeholder="Product Name"
           className="w-full border border-blue-200 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          required
         />
+
         <textarea
           name="description"
           value={formData.description}
           onChange={handleChange}
           placeholder="Description"
+          rows="3"
           className="w-full border border-blue-200 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          required
         />
+
+        <select
+          name="category"
+          value={formData.category}
+          onChange={handleChange}
+          className="w-full border border-yellow-400 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-200"
+          required
+        >
+          <option value="">Select Category</option>
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+
         <input
           name="price"
           type="number"
@@ -80,7 +111,9 @@ const ProductForm = ({ editProduct, setEditProduct, setShowForm }) => {
           onChange={handleChange}
           placeholder="Price"
           className="w-full border border-blue-200 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          required
         />
+
         <input
           name="countInStock"
           type="number"
@@ -88,25 +121,28 @@ const ProductForm = ({ editProduct, setEditProduct, setShowForm }) => {
           onChange={handleChange}
           placeholder="Count In Stock"
           className="w-full border border-blue-200 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          required
         />
+
         <input
           type="file"
           name="image"
           onChange={handleChange}
-          className="w-full border border-blue-200 px-3 py-2 rounded-lg bg-blue-50"
+          className="w-full border border-blue-200 px-3 py-2 rounded-lg bg-blue-50 cursor-pointer"
+          accept="image/*"
         />
 
-        <div className="flex justify-between mt-4">
+        <div className="flex justify-between mt-6">
           <button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition-all"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-lg shadow-md transition-all"
           >
             💾 Save
           </button>
           <button
             type="button"
             onClick={() => setShowForm(false)}
-            className="bg-gray-400 hover:bg-gray-500 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition-all"
+            className="bg-gray-400 hover:bg-gray-500 text-white font-semibold px-5 py-2 rounded-lg shadow-md transition-all"
           >
             ❌ Cancel
           </button>

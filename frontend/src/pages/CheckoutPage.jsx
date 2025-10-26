@@ -17,7 +17,7 @@ const CheckoutPage = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Fetch user's cart
+  // 🛒 Fetch cart items
   useEffect(() => {
     const fetchCart = async () => {
       try {
@@ -25,19 +25,27 @@ const CheckoutPage = () => {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         setCartItems(data.items || []);
-        setLoading(false);
       } catch (err) {
         console.error('Error fetching cart:', err);
+      } finally {
         setLoading(false);
       }
     };
     if (user) fetchCart();
   }, [user]);
 
-  const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
+  const totalPrice = cartItems.reduce(
+    (acc, item) => acc + item.price * item.qty,
+    0
+  );
 
-  // Create order
+  // ✅ Place order
   const handleOrder = async () => {
+    if (!deliverToUser || !shippingAddress.address) {
+      alert('Please fill all required fields.');
+      return;
+    }
+
     try {
       const orderData = {
         deliverToUser,
@@ -73,88 +81,111 @@ const CheckoutPage = () => {
     );
 
   return (
-    <div className="max-w-4xl mx-auto bg-blue-50 min-h-screen py-8 px-6 rounded-lg shadow-inner">
-      <h2 className="text-3xl font-bold text-center text-blue-700 mb-6">
-        Checkout
+    <div className="max-w-6xl mx-auto py-10 px-6 min-h-screen rounded-xl">
+      <h2 className="text-3xl font-bold text-center text-blue-700 mb-10">
+        🧾 Checkout
       </h2>
 
-      <div className="bg-white shadow-lg rounded-xl p-6 border-l-8 border-yellow-400">
-        {/* Deliver To */}
-        <div className="mb-6">
-          <label className="block text-blue-700 font-semibold mb-2">
-            Deliver To:
-          </label>
-          <input
-            type="text"
-            value={deliverToUser}
-            onChange={(e) => setDeliverToUser(e.target.value)}
-            className="w-full border border-yellow-300 focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none px-3 py-2 rounded-lg"
-            placeholder="Person collecting order"
-          />
-        </div>
+      <div className="grid md:grid-cols-2 gap-8">
+        {/* Left Section: Address + Payment */}
+        <div className="bg-white p-6 rounded-xl shadow-md border-l-4 border-blue-500">
+          <h3 className="text-2xl font-semibold text-blue-700 mb-6">
+            Shipping & Payment
+          </h3>
 
-        {/* Shipping Address */}
-        <h3 className="text-xl font-semibold text-blue-700 mb-3">
-          Shipping Address
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-          {['address', 'city', 'postalCode', 'country'].map((field) => (
+          {/* Deliver To */}
+          <div className="mb-4">
+            <label className="block text-blue-700 font-semibold mb-2">
+              Deliver To:
+            </label>
             <input
-              key={field}
               type="text"
-              value={shippingAddress[field]}
-              onChange={(e) =>
-                setShippingAddress({ ...shippingAddress, [field]: e.target.value })
-              }
-              placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-              className="border border-yellow-300 focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none px-3 py-2 rounded-lg"
+              value={deliverToUser}
+              onChange={(e) => setDeliverToUser(e.target.value)}
+              placeholder="Enter receiver's name"
+              className="w-full border border-yellow-300 px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-300 outline-none"
             />
-          ))}
-        </div>
-
-        {/* Payment Method */}
-        <h3 className="text-xl font-semibold text-blue-700 mb-3">
-          Payment Method
-        </h3>
-        <select
-          value={paymentMethod}
-          onChange={(e) => setPaymentMethod(e.target.value)}
-          className="border border-yellow-300 focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none px-3 py-2 rounded-lg mb-6 w-full md:w-1/2"
-        >
-          <option value="COD">Cash on Delivery</option>
-          <option value="UPI">UPI</option>
-          <option value="Card">Credit/Debit Card</option>
-        </select>
-
-        {/* Order Summary */}
-        <h3 className="text-2xl font-semibold text-blue-700 mt-4 mb-3">
-          Order Summary
-        </h3>
-        <div className="bg-yellow-50 rounded-lg p-4 shadow-inner">
-          {cartItems.map((item) => (
-            <div
-              key={item.productId}
-              className="flex justify-between items-center border-b border-yellow-200 py-2 last:border-none"
-            >
-              <span className="font-medium text-gray-800">{item.name}</span>
-              <span className="text-gray-700">
-                ₹{item.price} × {item.qty}
-              </span>
-            </div>
-          ))}
-          <div className="flex justify-between mt-4">
-            <h3 className="text-lg font-bold text-blue-800">Total:</h3>
-            <h3 className="text-lg font-bold text-yellow-600">
-              ₹{totalPrice.toFixed(2)}
-            </h3>
           </div>
+
+          {/* Shipping Fields */}
+          <h4 className="text-lg font-semibold text-blue-700 mb-2">
+            Shipping Address
+          </h4>
+          <div className="grid grid-cols-1 gap-3 mb-4">
+            {['address', 'city', 'postalCode', 'country'].map((field) => (
+              <input
+                key={field}
+                type="text"
+                value={shippingAddress[field]}
+                onChange={(e) =>
+                  setShippingAddress({
+                    ...shippingAddress,
+                    [field]: e.target.value,
+                  })
+                }
+                placeholder={`Enter ${field}`}
+                className="border border-yellow-300 px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-300 outline-none"
+              />
+            ))}
+          </div>
+
+          {/* Payment Method */}
+          <h4 className="text-lg font-semibold text-blue-700 mb-2">
+            Payment Method
+          </h4>
+          <select
+            value={paymentMethod}
+            onChange={(e) => setPaymentMethod(e.target.value)}
+            className="border border-yellow-300 px-3 py-2 rounded-lg w-full focus:ring-2 focus:ring-blue-300 outline-none"
+          >
+            <option value="COD">Cash on Delivery</option>
+            <option value="UPI">UPI</option>
+            <option value="Card">Credit/Debit Card</option>
+          </select>
         </div>
 
-        {/* Place Order Button */}
-        <div className="text-center mt-8">
+        {/* Right Section: Order Summary */}
+        <div className="bg-white p-6 rounded-xl shadow-md border-l-4 border-yellow-400">
+          <h3 className="text-2xl font-semibold text-blue-700 mb-4">
+            Order Summary
+          </h3>
+
+          <div className="max-h-80 overflow-y-auto divide-y divide-yellow-200">
+            {cartItems.map((item) => (
+              <div
+                key={item.productId}
+                className="flex justify-between items-center py-3"
+              >
+                <div className="flex items-center gap-3">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-16 h-16 object-cover rounded-lg border border-blue-200"
+                  />
+                  <div>
+                    <p className="font-semibold text-blue-800">{item.name}</p>
+                    <p className="text-sm text-gray-500">
+                      {item.product?.category || 'General'}
+                    </p>
+                  </div>
+                </div>
+                <span className="text-gray-700">
+                  ₹{item.price} × {item.qty}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 border-t pt-4">
+            <div className="flex justify-between text-lg font-semibold">
+              <span className="text-blue-800">Total:</span>
+              <span className="text-yellow-600">₹{totalPrice.toFixed(2)}</span>
+            </div>
+          </div>
+
           <button
             onClick={handleOrder}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-200"
+            className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition"
           >
             Place Order
           </button>

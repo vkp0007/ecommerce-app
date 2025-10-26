@@ -30,7 +30,7 @@ const Navbar = () => {
   }, [user]);
 
   return (
-    <nav className="bg-blue-600 text-white flex items-center justify-between px-4 py-3 shadow-md relative z-50">
+    <nav className="bg-blue-500 text-white flex items-center justify-between px-4 py-3 shadow-md relative z-50">
       {/* Left: Logo */}
       <div className="flex items-center gap-3">
         <Link

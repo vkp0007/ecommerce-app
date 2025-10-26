@@ -45,10 +45,10 @@ const ProductList = ({ setEditProduct, setShowForm }) => {
       <table className="min-w-full border border-blue-200 rounded-lg shadow-md overflow-hidden">
         <thead className="bg-blue-100">
           <tr>
-            <th className="border px-4 py-2 text-blue-800">Image</th>
-            <th className="border px-4 py-2 text-blue-800">Name</th>
-            <th className="border px-4 py-2 text-blue-800">Price</th>
-            <th className="border px-4 py-2 text-blue-800">Actions</th>
+            <th className="border px-4 py-2 text-blue-800">Product Image</th>
+            <th className="border px-4 py-2 text-blue-800">Product Name</th>
+            <th className="border px-4 py-2 text-blue-800">Product Category</th>
+            <th className="border px-4 py-2 text-blue-800">Price</th><th className="border px-4 py-2 text-blue-800">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -65,7 +65,10 @@ const ProductList = ({ setEditProduct, setShowForm }) => {
                 {p.name}
               </td>
               <td className="border px-4 py-2 text-yellow-600 font-semibold text-center">
-                ₹{p.price}
+                ₹ {p.price}
+              </td>
+               <td className="border px-4 py-2 text-blue-600 font-semibold text-center">
+                {p.category}
               </td>
               <td className="border px-4 py-2 flex justify-center gap-3">
                 <button

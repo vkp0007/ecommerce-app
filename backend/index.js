@@ -15,10 +15,9 @@ const app = express();
 app.use(
   cors({
     origin: [
-      'https://ecommerce-app-6f2b.vercel.app' // your frontend domain
+      'http://localhost:5173' // your frontend domain
       
-    ],
-    credentials: true,
+    ]
   })
 );
 
@@ -31,7 +30,9 @@ databaseConnection();
 app.get('/', (req, res) => {
   res.send('API is running and DB is connected!');
 });
-
+app.listen(process.env.PORT || 8000, () => {
+  console.log(`Server is running on port ${process.env.PORT || 8000}`);
+})
 
 // ✅ Mount routes
 app.use('/api/users', authRoutes);

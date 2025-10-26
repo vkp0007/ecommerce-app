@@ -34,7 +34,7 @@ const productSchema = new Schema({
             'Books',
             'Toys',
             'Sports',
-            'Beauty',
+            
         ]
     },
     user: {
