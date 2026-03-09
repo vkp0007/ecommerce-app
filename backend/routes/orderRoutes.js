@@ -6,5 +6,6 @@ import { getOrders, createOrder } from '../controllers/orderControllers.js'
 router.route('/')
     .get(protect, getOrders)
     .post(protect, createOrder);
-
+router.route("/:id")
+  .get(protect, getOrderById);
 export default router;
