@@ -53,24 +53,4 @@ const createOrder = async (req, res) => {
   }
 };
 
-const getOrderById = async (req, res) => {
-  try {
-
-    const order = await Order.findById(req.params.id);
-
-    if (!order) {
-      return res.status(404).json({ message: "Order not found" });
-    }
-
-    // ensure user owns this order
-    if (order.userId.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: "Not authorized" });
-    }
-
-    res.status(200).json(order);
-
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-export { getOrders, createOrder, getOrderById };
+export { getOrders, createOrder };

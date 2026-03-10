@@ -7,7 +7,9 @@ const ProductForm = ({ editProduct, setEditProduct, setShowForm }) => {
 
   const [formData, setFormData] = useState({
     name: editProduct?.name || "",
-    description: editProduct?.description || "",
+    description: editProduct?.description
+      ? editProduct.description.split("*").join("\n")
+      : "",
     category: editProduct?.category || "",
     price: editProduct?.price || "",
     countInStock: editProduct?.countInStock || "",
@@ -25,6 +27,7 @@ const ProductForm = ({ editProduct, setEditProduct, setShowForm }) => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]: files ? files[0] : value,
@@ -33,9 +36,23 @@ const ProductForm = ({ editProduct, setEditProduct, setShowForm }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const fd = new FormData();
+
     Object.keys(formData).forEach((key) => {
-      if (formData[key]) fd.append(key, formData[key]);
+      if (!formData[key]) return;
+
+      if (key === "description") {
+        const formatted = formData.description
+          .split("\n")
+          .map((line) => line.trim())
+          .filter(Boolean)
+          .join(" * ");
+
+        fd.append("description", formatted);
+      } else {
+        fd.append(key, formData[key]);
+      }
     });
 
     try {
@@ -46,7 +63,8 @@ const ProductForm = ({ editProduct, setEditProduct, setShowForm }) => {
             Authorization: `Bearer ${user.token}`,
           },
         });
-        alert("✅ Product updated successfully");
+
+        alert("Product updated successfully");
       } else {
         await axios.post("/products", fd, {
           headers: {
@@ -54,28 +72,31 @@ const ProductForm = ({ editProduct, setEditProduct, setShowForm }) => {
             Authorization: `Bearer ${user.token}`,
           },
         });
-        alert("✅ Product added successfully");
+
+        alert("Product added successfully");
       }
+
       setShowForm(false);
       setEditProduct(null);
     } catch {
-      alert("❌ Failed to save product");
+      alert("Failed to save product");
     }
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg max-w-lg mx-auto border border-blue-200 my-8">
-      <h3 className="text-2xl font-bold text-blue-700 mb-6 text-center">
-        {editProduct ? "✏️ Edit Product" : "➕ Add New Product"}
+    <div className="bg-white p-6 rounded-xl shadow max-w-lg mx-auto border my-8">
+      <h3 className="text-xl font-bold mb-6 text-center">
+        {editProduct ? "Edit Product" : "Add Product"}
       </h3>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+
         <input
           name="name"
           value={formData.name}
           onChange={handleChange}
           placeholder="Product Name"
-          className="w-full border border-blue-200 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full border px-3 py-2 rounded-lg"
           required
         />
 
@@ -83,70 +104,80 @@ const ProductForm = ({ editProduct, setEditProduct, setShowForm }) => {
           name="description"
           value={formData.description}
           onChange={handleChange}
-          placeholder="Description"
-          rows="3"
-          className="w-full border border-blue-200 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          rows="5"
+          placeholder="Enter features (one per line)"
+          className="w-full border px-3 py-2 rounded-lg"
           required
         />
+
+        <p className="text-xs text-gray-500">
+          Each line will appear as bullet points on product page.
+        </p>
 
         <select
           name="category"
           value={formData.category}
           onChange={handleChange}
-          className="w-full border border-yellow-400 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-200"
+          className="w-full border px-3 py-2 rounded-lg"
           required
         >
           <option value="">Select Category</option>
           {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
+            <option key={cat}>{cat}</option>
           ))}
         </select>
 
-        <input
-          name="price"
-          type="number"
-          value={formData.price}
-          onChange={handleChange}
-          placeholder="Price"
-          className="w-full border border-blue-200 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-          required
-        />
+        <div className="grid grid-cols-2 gap-3">
 
-        <input
-          name="countInStock"
-          type="number"
-          value={formData.countInStock}
-          onChange={handleChange}
-          placeholder="Count In Stock"
-          className="w-full border border-blue-200 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-          required
-        />
+          <input
+            type="number"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            placeholder="Price"
+            className="border px-3 py-2 rounded-lg"
+            required
+          />
+
+          <input
+            type="number"
+            name="countInStock"
+            value={formData.countInStock}
+            onChange={handleChange}
+            placeholder="Stock"
+            className="border px-3 py-2 rounded-lg"
+            required
+          />
+
+        </div>
 
         <input
           type="file"
           name="image"
           onChange={handleChange}
-          className="w-full border border-blue-200 px-3 py-2 rounded-lg bg-blue-50 cursor-pointer"
+          className="w-full border px-3 py-2 rounded-lg"
           accept="image/*"
         />
 
-        <div className="flex justify-between mt-6">
+        <div className="flex justify-between pt-4">
+
           <button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-lg shadow-md transition-all"
+            className="bg-blue-600 text-white px-5 py-2 rounded-lg"
           >
-            💾 Save
+            Save
           </button>
+
           <button
             type="button"
             onClick={() => setShowForm(false)}
-            className="bg-gray-400 hover:bg-gray-500 text-white font-semibold px-5 py-2 rounded-lg shadow-md transition-all"
+            className="bg-gray-400 text-white px-5 py-2 rounded-lg"
           >
-            ❌ Cancel
+            Cancel
           </button>
+
         </div>
+
       </form>
     </div>
   );

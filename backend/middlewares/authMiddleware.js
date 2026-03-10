@@ -32,4 +32,4 @@ const adminOnly = (req, res, next) => {
   return res.status(403).json({ message: 'Access denied, admin only' });
 };
 
-export { protect, adminOnly };
+export { protect, adminOnly }
