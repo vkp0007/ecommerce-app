@@ -15,7 +15,7 @@ const app = express();
 app.use(
   cors({
     origin: [
-    'https://ecommerce-app-6f2b.vercel.app',
+    'https://mini-store-mu-mauve.vercel.app/',
       'http://localhost:5173'// your frontend domain
       
     ],
