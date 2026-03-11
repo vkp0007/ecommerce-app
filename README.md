@@ -1,10 +1,14 @@
-# 🛍️ Mini E-Commerce Web Application (MERN Stack)
+# 🛍️ MiniStore Web Application (MERN Stack)
 
-A modern and fully functional **Mini E-Commerce web application** built using the **MERN stack (MongoDB, Express.js, React, Node.js)**. 
+A modern and fully functional **MiniStore web application** built using the **MERN stack (MongoDB, Express.js, React, Node.js)**. 
 This project includes essential features like **user authentication**, **product listing**, **cart management**, **order handling**, and **secure checkout**.
 
 ---
+## 🌍 Live Demo
 
+🔗[Click to view](https://mini-store-mu-mauve.vercel.app/)
+
+---
 ## 🚀 Features
 
 ### 👥 User
@@ -111,22 +115,6 @@ npm start
 ```
 ---
 
-## 📸 Screenshots
-
-### Home Page
-<img width="1892" height="690" alt="Screenshot 2025-10-27 171625" src="https://github.com/user-attachments/assets/45ff0384-5f1a-4bb5-9f68-8f57676dce59" />
-
-
-### Product Page
-<img width="1920" height="821" alt="Screenshot (13)" src="https://github.com/user-attachments/assets/754e393f-b4fa-41e7-b34d-a028b2f5dd52" />
-
-
-### Orders Page
-<img width="1896" height="830" alt="Screenshot 2025-10-27 175525" src="https://github.com/user-attachments/assets/307b8c05-84e6-42de-9a87-5ef74db77b6b" />
-
-
----
-
 ## 🧠 Learnings
 
 During this project, I learned and implemented:
@@ -163,13 +151,6 @@ Feel free to fork the repository and submit a pull request.
 5. **Open a Pull Request**
 
 ---
-
-## 🌍 Live Demo
-
-🔗 **Frontend (Vercel):** [Live Demo Link](https://your-app.vercel.app)
-
----
-
 <div align="center">
 
 ### ⭐ Star this repo if you find it helpful!
