@@ -20,6 +20,11 @@ This project includes essential features like **user authentication**, **product
 - ✅ Add items to the cart or buy directly
 - ✅ Search and filter products by category
 
+### ⚡ UI & Performance
+- ✅ Skeleton loading for smoother page transitions
+- ✅ Lazy loading to improve initial load performance
+- ✅ Product carousel for improved browsing experience
+
 ### 💬 Product Reviews
 - ✅ Static reviews displayed for now
 - ✅ Shows sample user comments and ratings
